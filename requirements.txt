@@ -1,4 +1,9 @@
-transformers
-gradio
-datasets
-torch
+transformers~=4.39.3
+gradio~=4.25.0
+datasets~=2.18.0
+torch~=2.2.2
+requests~=2.31.0
+pillow~=10.3.0
+torchvision~=0.17.2
+numpy~=1.26.4
+matplotlib~=3.8.4
