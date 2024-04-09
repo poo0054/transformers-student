@@ -64,3 +64,7 @@ import evaluate
 metric = evaluate.load("glue", "mrpc")
 compute = metric.compute(predictions=preds, references=predictions.label_ids)
 print(compute)
+
+pt_save_directory = "D:/cache/model/demo1"
+tokenizer.save_pretrained(pt_save_directory)
+model.save_pretrained(pt_save_directory)
