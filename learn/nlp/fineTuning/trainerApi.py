@@ -4,7 +4,6 @@ from transformers import AutoTokenizer, DataCollatorWithPadding
 from transformers import Trainer
 from transformers import TrainingArguments
 
-raw_datasets = load_dataset("glue", "mrpc")
 checkpoint = "bert-base-uncased"
 tokenizer = AutoTokenizer.from_pretrained(checkpoint)
 
@@ -17,6 +16,8 @@ model.config.id2label = {0: "not_equivalent", 1: "equivalent"}
 def tokenize_function(example):
     return tokenizer(example["sentence1"], example["sentence2"], truncation=True)
 
+
+raw_datasets = load_dataset("glue", "mrpc")
 
 tokenized_datasets = raw_datasets.map(tokenize_function, batched=True)
 data_collator = DataCollatorWithPadding(tokenizer=tokenizer)
@@ -38,6 +39,26 @@ trainer = Trainer(
 )
 
 trainer.train()
+# 预测
+predictions = trainer.predict(tokenized_datasets["validation"])
+print(predictions.predictions.shape, predictions.label_ids.shape)
+
+import numpy as np
+
+preds = np.argmax(predictions.predictions, axis=-1)
+
+import evaluate
+
+metric = evaluate.load("glue", "mrpc")
+metric.compute(predictions=preds, references=predictions.label_ids)
+
+
+def compute_metrics(eval_preds):
+    metric = evaluate.load("glue", "mrpc")
+    logits, labels = eval_preds
+    predictions = np.argmax(logits, axis=-1)
+    return metric.compute(predictions=predictions, references=labels)
+
 
 # 保存模型
 tokenizer.save_pretrained("bert-base-uncased-text")

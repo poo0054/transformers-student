@@ -5,9 +5,9 @@ from transformers import AutoTokenizer
 
 raw_datasets = load_dataset("glue", "mrpc")
 
-checkpoint = "bert-base-uncased"
+# checkpoint = "bert-base-uncased"
 # checkpoint = "./test-trainer/checkpoint-1000"
-# checkpoint = "./bert-base-uncased-text"
+checkpoint = "./bert-base-uncased-text"
 tokenizer = AutoTokenizer.from_pretrained(checkpoint)
 
 index = 4
@@ -25,9 +25,3 @@ output = model(**batch_encoding)
 print(output)
 print("softmax:", torch.nn.functional.softmax(output.logits, dim=-1))
 print(model.config.id2label)
-
-# softmax tensor([[0.8536, 0.1464],
-#         [0.8775, 0.1225]], grad_fn=<SoftmaxBackward0>)
-
-# softmax: tensor([[0.9957, 0.0043],
-#         [0.9963, 0.0037]], grad_fn=<SoftmaxBackward0>)
