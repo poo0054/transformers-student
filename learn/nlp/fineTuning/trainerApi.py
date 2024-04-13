@@ -1,3 +1,6 @@
+from os import putenv
+putenv("HSA_OVERRIDE_GFX_VERSION", "10.3.0")
+
 from datasets import load_dataset
 from transformers import AutoModelForSequenceClassification
 from transformers import AutoTokenizer, DataCollatorWithPadding
@@ -27,6 +30,12 @@ data_collator = DataCollatorWithPadding(tokenizer=tokenizer)
 
 training_args = TrainingArguments("test-trainer")
 
+def compute_metrics(eval_preds):
+    metric = evaluate.load("glue", "mrpc")
+    logits, labels = eval_preds
+    predictions = np.argmax(logits, axis=-1)
+    return metric.compute(predictions=predictions, references=labels)
+
 # 一旦我们有了我们的模型，我们就可以定义一个 Trainer 通过将之前构造的所有对象传递给它——我们的model 、training_args ，
 # 训练和验证数据集，data_collator ，和 tokenizer ：
 trainer = Trainer(
@@ -39,6 +48,7 @@ trainer = Trainer(
 )
 
 trainer.train()
+
 # 预测
 predictions = trainer.predict(tokenized_datasets["validation"])
 print(predictions.predictions.shape, predictions.label_ids.shape)
@@ -50,15 +60,9 @@ preds = np.argmax(predictions.predictions, axis=-1)
 import evaluate
 
 metric = evaluate.load("glue", "mrpc")
-metric.compute(predictions=preds, references=predictions.label_ids)
+compute = metric.compute(predictions=preds, references=predictions.label_ids)
 
-
-def compute_metrics(eval_preds):
-    metric = evaluate.load("glue", "mrpc")
-    logits, labels = eval_preds
-    predictions = np.argmax(logits, axis=-1)
-    return metric.compute(predictions=predictions, references=labels)
-
+print(compute)
 
 # 保存模型
 tokenizer.save_pretrained("bert-base-uncased-text")
