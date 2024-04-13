@@ -25,3 +25,5 @@ output = model(**batch_encoding)
 print(output)
 print("softmax:", torch.nn.functional.softmax(output.logits, dim=-1))
 print(model.config.id2label)
+
+# softmax: tensor([[0.0039, 0.9961]], grad_fn=<SoftmaxBackward0>)
