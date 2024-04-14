@@ -1,4 +1,5 @@
 from os import putenv
+
 putenv("HSA_OVERRIDE_GFX_VERSION", "10.3.0")
 
 from datasets import load_dataset
@@ -30,11 +31,14 @@ data_collator = DataCollatorWithPadding(tokenizer=tokenizer)
 
 training_args = TrainingArguments("test-trainer")
 
+
+# 最后将所有东西打包在一起，我们得到了我们的 compute_metrics() 函数：
 def compute_metrics(eval_preds):
-    metric = evaluate.load("glue", "mrpc")
     logits, labels = eval_preds
     predictions = np.argmax(logits, axis=-1)
+    metric = evaluate.load("glue", "mrpc")
     return metric.compute(predictions=predictions, references=labels)
+
 
 # 一旦我们有了我们的模型，我们就可以定义一个 Trainer 通过将之前构造的所有对象传递给它——我们的model 、training_args ，
 # 训练和验证数据集，data_collator ，和 tokenizer ：
