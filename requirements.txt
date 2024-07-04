@@ -1,8 +1,5 @@
-transformers~=4.39.3
-datasets~=2.18.0
-evaluate~=0.4.1
-numpy~=1.26.3
-requests~=2.31.0
-pillow~=10.2.0
-torch~=2.2.2+rocm5.7
-torchvision~=0.17.2+rocm5.7
+transformers[sentencepiece]
+datasets
+evaluate
+accelerate
+torch
