@@ -36,7 +36,9 @@ def compute_metrics(eval_preds):
     metric = evaluate.load("glue", "mrpc")
     logits, labels = eval_preds
     predictions = np.argmax(logits, axis=-1)
-    return metric.compute(predictions=predictions, references=labels)
+    compute = metric.compute(predictions=predictions, references=labels)
+    print("compute_metrics------", compute)
+    return compute
 
 
 trainer = Trainer(
@@ -50,3 +52,8 @@ trainer = Trainer(
 )
 
 trainer.train()
+
+save = "./output"
+
+model.save_pretrained(save)
+tokenizer.save_pretrained(save)

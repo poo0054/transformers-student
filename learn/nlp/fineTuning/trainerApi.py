@@ -1,6 +1,4 @@
-from os import putenv
-
-putenv("HSA_OVERRIDE_GFX_VERSION", "10.3.0")
+# putenv("HSA_OVERRIDE_GFX_VERSION", "10.3.0")
 
 from datasets import load_dataset
 from transformers import AutoModelForSequenceClassification
@@ -55,7 +53,7 @@ trainer.train()
 
 # 预测
 predictions = trainer.predict(tokenized_datasets["validation"])
-print(predictions.predictions.shape, predictions.label_ids.shape)
+print("predict------", predictions.predictions.shape, predictions.label_ids.shape)
 
 import numpy as np
 
@@ -66,8 +64,8 @@ import evaluate
 metric = evaluate.load("glue", "mrpc")
 compute = metric.compute(predictions=preds, references=predictions.label_ids)
 
-print(compute)
+print("compute------", compute)
 
 # 保存模型
-tokenizer.save_pretrained("bert-base-uncased-text")
-model.save_pretrained("bert-base-uncased-text")
+tokenizer.save_pretrained("./bert-base-uncased-text1")
+model.save_pretrained("./bert-base-uncased-text1")
