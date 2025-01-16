@@ -1,0 +1,8 @@
+{
+  "name": "get_current_conditions",
+  "parameters": {
+    "temperature": 38,
+    "from_unit": "Celsius",
+    "to_unit": "Fahrenheit"
+  }
+}
