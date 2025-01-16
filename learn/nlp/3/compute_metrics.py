@@ -55,5 +55,5 @@ trainer.train()
 
 save = "./output"
 
-model.save_pretrained(save)
-tokenizer.save_pretrained(save)
+model.save_pretrained(save + "/model")
+tokenizer.save_pretrained(save + "/tokenizer")
